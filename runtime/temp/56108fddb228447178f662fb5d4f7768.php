@@ -1,4 +1,4 @@
-<?php /*a:1:{s:66:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\index\welcome.html";i:1609318816;}*/ ?>
+<?php /*a:1:{s:66:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\index\welcome.html";i:1609827514;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -174,7 +174,7 @@
             </table>
               </div>
             </fieldset>
-            <blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本后台系统由X前端框架提供前端技术支持。</blockquote>
+            <blockquote class="layui-elem-quote layui-quote-nm">wsn-提供</blockquote>
             
         </div>
         <script>

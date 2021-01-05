@@ -1,4 +1,4 @@
-<?php /*a:2:{s:64:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\index\index.html";i:1609234494;s:66:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\.\common\base.html";i:1609234909;}*/ ?>
+<?php /*a:2:{s:64:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\index\index.html";i:1609827310;s:66:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\.\common\base.html";i:1609832987;}*/ ?>
 
 <!doctype html>
 <html lang="en">
@@ -21,7 +21,7 @@
 <body>
 <!-- 顶部开始 -->
 <div class="container">
-    <div class="logo"><a href="./index.html">X-admin v2.0</a></div>
+    <div class="logo"><a href="./index.html">XXX管理后台</a></div>
     <div class="left_open">
         <i title="展开左侧栏" class="iconfont">&#xe699;</i>
     </div>
@@ -37,11 +37,11 @@
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">admin</a>
+            <a href="javascript:;"><?php echo htmlentities($userInfo['nickname']); ?></a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">个人信息</a></dd>
                 <dd><a onclick="x_admin_show('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-                <dd><a href="./login.html">退出</a></dd>
+                <dd><a href="<?php echo url('admins/Index/quitLogin'); ?>">退出</a></dd>
             </dl>
         </li>
         <li class="layui-nav-item to-index"><a href="/">前台首页</a></li>
@@ -62,7 +62,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="member-list.html">
+                        <a _href="<?php echo url('admins/admin/teamList'); ?>">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>会员列表</cite>
 
@@ -227,7 +227,7 @@
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <iframe src="<?php echo url('admin/Index/welcome'); ?>" frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+                    <iframe src="<?php echo url('admins/Index/welcome'); ?>" frameborder="0" scrolling="yes" class="x-iframe"></iframe>
                 </div>
             </div>
         </div>

@@ -197,6 +197,34 @@ function sumint(){
     }
     return $disk_totle;
 }
-function get_file(){
-    return __FILE__;
+function getroleInfo($role_id){
+    $roleInfo = \think\Db::name('role')->where(['id' => $role_id,'status' => 1])->find();
+    if($roleInfo){$roleInfo['action'] = explode(',',$roleInfo['action']);}
+      return  $roleInfo;
+}
+function getroleArray($admin_id,$field = 'a.*'){
+    $data = \think\Db::name('admin')->alias('a')
+        ->leftJoin('admin_role b','a.id=b.admin_id')
+        ->leftJoin('role c','b.role_id = c.id')
+        ->where(['a.status' => 1, 'c.status' => 1, 'a.id' => $admin_id])
+        ->field($field)
+        ->find();
+    if(isset($data['action'])) $data['action'] = explode(',',$data['action']);
+    return  $data;
+}
+function getroleArrayPart($admin_id){
+    $admin_info = \think\Db::name('admin')->alias('a')
+        ->leftJoin('admin_role b', 'a.id=b.admin_id')
+        ->leftJoin('role c', 'b.role_id = c.id')
+        ->where(['a.status' => 1, 'c.status' => 1, 'a.id' => $admin_id])
+        ->field('a.*')
+        ->find();
+    $role_info = \think\Db::name('admin')->alias('a')
+        ->leftJoin('admin_role b', 'a.id=b.admin_id')
+        ->leftJoin('role c', 'b.role_id = c.id')
+        ->where(['a.status' => 1, 'c.status' => 1, 'a.id' => $admin_id])
+        ->field('c.*')
+        ->find();
+    if(!empty($role_info)) $data['action'] = explode(',',$role_info['action']);
+    return  ['admin_info'=>$admin_info,'role_info'=>$role_info];
 }

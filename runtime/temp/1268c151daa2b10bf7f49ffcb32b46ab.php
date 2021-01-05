@@ -1,4 +1,4 @@
-<?php /*a:1:{s:64:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\login\index.html";i:1609230444;}*/ ?>
+<?php /*a:1:{s:64:"D:\phpstudy_pro\WWW\mhhy\application\admin\view\login\index.html";i:1609815400;}*/ ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -35,7 +35,7 @@
 
     <script>
         $(function  () {
-            var url = "<?php echo url('admin/Login/logindispose'); ?>";
+            var url = "<?php echo url('admins/Login/logindispose'); ?>";
             layui.use('form', function(){
               var form = layui.form;
               // layer.msg('玩命卖萌中', function(){

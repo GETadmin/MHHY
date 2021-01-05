@@ -26,7 +26,8 @@ class Check extends Controller
         if(!in_array($auth_key,$permission_module)){
             $token = is_login($request);
             if(!$token){
-                return redirect('admin/login/index');
+                return   $this->error('请登录账号','admin/login/index');
+//                return redirect('admin/login/index');
             }
             $request->token = $token;
         }

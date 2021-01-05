@@ -16,6 +16,12 @@ class Base extends Controller
     public $request_all;
     public $request;
     static private $newdata=[];
+    private $action;
+    private $module;
+    private $controller;
+    public $admin_id;
+    public $role_id;
+    public $action_auth;
     //头部
     private static $header=array(
         'alg'=>'HS256', //生成signature的算法
@@ -30,7 +36,10 @@ class Base extends Controller
     public function __construct(Request $request){
         parent::__construct();
         //处理token值
-        $this->tokenHandle($request->token);
+        $user_data = $this->VerifyHandle($request->token);
+        $this->action = $request->action();
+        $this->module = $request->module();
+        $this->controller = $request->controller();
         $this->request = $request->post();
     }
     public function baseInstance($colass){
@@ -158,8 +167,29 @@ class Base extends Controller
         if (!empty($data)) $respond['data'] = $data;
         exit(json_encode($respond));
     }
-    private function tokenHandle($token){
-       $data = Jwt::baseInstance()->getUserData($token)->respond();
-       print_r($data);exit;
-}
+
+    private function VerifyHandle($token)
+    {
+        $request = Jwt::baseInstance($token)->getDecode()->validity_time()->ending();
+        if ($request['code'] != 200) {
+            $this->error('验证码过期，请重新登录', '/admin');
+        }
+        $request_data = $request['data'];
+        $this->admin_id = $request_data['user_id'];
+        $this->role_id = $request_data['role_id'];
+        $roleInfo = getroleInfo($this->role_id);
+        $actionInfo = $roleInfo['action']?:[];
+        if (array_search('admin', $actionInfo) == "") {
+            //验证是否有操作权限
+            $result = $this->verifyAuht();
+            if (in_array($result, $actionInfo)) {
+                $this->error('非法操作', '/admin');
+            }
+        }
+    }
+    public function verifyAuht()
+    {
+        $auth_key = trim($this->controller).'-'.trim($this->action);
+        return $auth_key;
+    }
 }

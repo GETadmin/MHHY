@@ -9,9 +9,9 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 Route::rule('/','index');
+Route::rule('/admin', 'admin/Login/index');
+Route::group('/admins',function (){
 
-Route::group('admin',function (){
-        Route::rule('/', 'admin/Login/logins');
         Route::rule('login/:name', 'admin/Login/:name');
         Route::rule('index/:name', 'admin/Index/:name');
 })->middleware(app\http\middleware\Check::class);

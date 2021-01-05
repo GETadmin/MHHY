@@ -8,7 +8,7 @@
 
 namespace app\admin\controller;
 
-use app\common\Base;
+use think\Controller;
 use think\Db;
 use think\facade\Config;
 use think\facade\Cookie;
@@ -17,11 +17,13 @@ use think\facade\Session;
 use think\facade\Validate;
 use app\common\Jwt;
 
-class Login extends Base
+class Login extends Controller
 {
-        public function __construct(Request $request)
+    public $request;
+        public function __construct()
         {
-            parent::__construct($request);
+            parent::__construct();
+            $this->request = FacadeRequest::post();
         }
         public function index(){
                 return $this->fetch();
@@ -30,7 +32,6 @@ class Login extends Base
     public function logindispose()
     {
         if (FacadeRequest::isAjax() && FacadeRequest::isPost()) {
-            $request = FacadeRequest::post();
             $rule = ['username' => 'require|max：50|min：8', 'password' => 'require|alphaNum|min:8'];
             $msg = [
                 'username.require' => '用户名称不能为空！',
@@ -51,12 +52,13 @@ class Login extends Base
                         ->leftJoin('admin_role b', 'a.id=b.admin_id')
                         ->leftJoin('role c', 'b.role_id = c.id')
                         ->where(['a.status' => 1, 'c.status' => 1, 'a.id' => $adminInfo['id']])
-                        ->field('a.*,c.action')
+                        ->field('a.*,c.id as role_id,c.action')
                         ->find();
                     if (!empty($auth['action'])) $auth['action'] = explode(',', $auth['action']);
                     $exptime = 60;
-                    $token_arr = ['user_id' => $auth['id'], 'name' => $auth['name'], 'nickname' => $auth['nickname'], 'sex' => $auth['sex'], 'exptime' => $exptime, 'expiration' => time() + $exptime];
-                    $tokens = Jwt::baseInstance()->setJwtToken($token_arr)->respond();
+                    $token_arr = ['user_id' => $auth['id'], 'name' => $auth['name'], 'nickname' => $auth['nickname'], 'sex' => $auth['sex'],'action'=>$auth['action'],'role_id'=>$auth['role_id']];
+                    $tokens = Jwt::baseInstance($token_arr)->getEncode()->ending();
+
                     if ($tokens['code'] == 200) {
                         $token_key = quchufh($tokens['data']);
                         $token_key = explode('.',$token_key);
@@ -64,7 +66,7 @@ class Login extends Base
                         Session::set($token_key, $tokens['data']);
                         $key = Config::get('app.cookie_key');
                         Cookie::set('token', encrypt($token_key, $key));
-                        $this->success('登录成功', 'Index/index');
+                        $this->success('登录成功', 'admins/Index/index');
                     } else {
                         $this->error('登录失败');
                     }
